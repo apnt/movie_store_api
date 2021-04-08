@@ -1,0 +1,6 @@
+venv
+venv/
+idea
+.idea/
+**/*.py[cod]
+*.sqlite3
