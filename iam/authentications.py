@@ -2,6 +2,7 @@ from rest_framework import authentication
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken, AuthenticationFailed
+from drf_spectacular.extensions import OpenApiAuthenticationExtension
 
 
 class JWTCookieAuthentication(authentication.BaseAuthentication):
@@ -58,3 +59,15 @@ class JWTCookieAuthentication(authentication.BaseAuthentication):
             raise AuthenticationFailed('User is inactive', code='user_inactive')
 
         return user
+
+
+class JWTCookieAuthenticationScheme(OpenApiAuthenticationExtension):
+    target_class = JWTCookieAuthentication
+    name = 'JWT Cookie Authentication'
+
+    def get_security_definition(self, auto_schema):
+        return {
+            'type': 'apiKey',
+            'in': 'cookie',
+            'name': 'access',
+        }

@@ -5,8 +5,10 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.exceptions import TokenError
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from drf_spectacular.utils import extend_schema
 from .authentications import JWTCookieAuthentication
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
+from .serializers import CustomTokenRefreshSerializer
 
 
 class AuthView(GenericAPIView):
@@ -17,9 +19,10 @@ class AuthView(GenericAPIView):
     def get_serializer_class(self):
         """Return the class to use for the serializer."""
         if self.request.method == 'PATCH':
-            return TokenRefreshSerializer
+            return CustomTokenRefreshSerializer
         return TokenObtainPairSerializer
 
+    @extend_schema(responses={200: {}})
     def post(self, request, *args, **kwargs):
         """
         User login with email and password.
@@ -39,6 +42,7 @@ class AuthView(GenericAPIView):
         response.set_cookie(**self.refresh_cookie(serializer.validated_data['refresh']))
         return response
 
+    @extend_schema(request=CustomTokenRefreshSerializer, responses={200: {}})
     def patch(self, request, *args, **kwargs):
         """Refresh access token and update in access cookie using the refresh token in the refresh cookie."""
         refresh_token = request.COOKIES.get(api_settings.user_settings['AUTH_REFRESH_COOKIE'])
@@ -55,6 +59,7 @@ class AuthView(GenericAPIView):
         response.set_cookie(**self.access_cookie(serializer.validated_data['access']))
         return response
 
+    @extend_schema(responses={200: {}})
     def delete(self, request, *args, **kwargs):
         """User logout. Clears the access and refresh cookies."""
         response = Response(status=status.HTTP_200_OK)
