@@ -8,9 +8,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         user_model = get_user_model()
 
-        user_email = input('Enter email: ')
-        user_first_name = input('Enter first name: ')
-        user_last_name = input('Enter last name: ')
+        email = input('Enter email: ')
+        first_name = input('Enter first name: ')
+        last_name = input('Enter last name: ')
 
         while True:
             password = input('Enter password: ')
@@ -20,10 +20,13 @@ class Command(BaseCommand):
             else:
                 print("Passwords do not match")
 
-        user = user_model.objects.create_user(
-            email=user_email,
-            first_name=user_first_name,
-            last_name=user_last_name,
-            password=password
-        )
-        print("User {} created with id {} and uuid {}".format(user.email, user.pk, user.uuid))
+        try:
+            user = user_model.objects.create_user(
+                email=email,
+                first_name=first_name,
+                last_name=last_name,
+                password=password
+            )
+            print("User {} created with id {} and uuid {}".format(user.email, user.pk, user.uuid))
+        except Exception as e:
+            print('User creation failed: {}'.format(e))

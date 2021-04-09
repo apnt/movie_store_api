@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_spectacular',
     'iam.apps.IamConfig',
+    'movie_store.apps.MovieStoreConfig',
 ]
 
 MIDDLEWARE = [
@@ -61,7 +62,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'iam.authentications.JWTCookieAuthentication',
     ),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
