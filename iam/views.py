@@ -2,13 +2,18 @@ from datetime import datetime
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
+from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.permissions import AllowAny
+from rest_framework.exceptions import NotAuthenticated
 from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.exceptions import TokenError
+from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from drf_spectacular.utils import extend_schema
+from common.permissions import IsSuperuser
 from .authentications import JWTCookieAuthentication
-from .serializers import CustomTokenRefreshSerializer
+from .serializers import CustomTokenRefreshSerializer, CustomUserSerializer
+from .models import CustomUser
 
 
 class AuthView(GenericAPIView):
@@ -46,6 +51,8 @@ class AuthView(GenericAPIView):
     def patch(self, request, *args, **kwargs):
         """Refresh access token and update in access cookie using the refresh token in the refresh cookie."""
         refresh_token = request.COOKIES.get(api_settings.user_settings['AUTH_REFRESH_COOKIE'])
+        if refresh_token is None:
+            raise NotAuthenticated
         serializer = self.get_serializer(data={'refresh': refresh_token})
 
         try:
@@ -84,3 +91,16 @@ class AuthView(GenericAPIView):
             'expires': (datetime.utcnow() + api_settings.REFRESH_TOKEN_LIFETIME),
             'httponly': True,
         }
+
+
+class UserViewSet(ReadOnlyModelViewSet):
+    queryset = CustomUser.objects.all()
+    permission_classes = (IsSuperuser,)
+    serializer_class = CustomUserSerializer
+    lookup_field = 'uuid'
+
+    # filtering and ordering
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ['email', 'first_name', 'last_name']
+    ordering_fields = ['date_joined', 'last_name', 'first_name', 'last_login']
+    ordering = ['last_name', 'first_name']

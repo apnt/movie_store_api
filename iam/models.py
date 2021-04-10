@@ -24,3 +24,6 @@ class CustomUser(AbstractBaseUser):
 
     # set required fields
     REQUIRED_FIELDS = []
+
+    class Meta:
+        ordering = ('date_joined',)
