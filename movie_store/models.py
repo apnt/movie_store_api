@@ -22,6 +22,12 @@ class Movie(models.Model):
     director = models.CharField(max_length=255)
     genres = models.ManyToManyField(Genre, related_name='movies', related_query_name='movie')
 
+    def __str__(self):
+        return '{title} ({year})'.format(title=self.title, year=self.year)
+
+    class Meta:
+        ordering = ('year',)
+
 
 class Rental(models.Model):
     uuid = models.UUIDField(unique=True, editable=False, default=uuid4)
@@ -32,3 +38,6 @@ class Rental(models.Model):
     return_date = models.DateTimeField(blank=True, null=True)
     returned = models.BooleanField(default=False)
     payment = models.FloatField(null=True, editable=False)
+
+    class Meta:
+        ordering = ('rental_date',)

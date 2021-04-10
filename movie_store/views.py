@@ -1,6 +1,6 @@
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.decorators import action
@@ -8,6 +8,7 @@ from .models import Genre, Movie, Rental
 from .serializers import GenreSerializer, MovieSerializer, \
     CreateRentalSerializer, UpdateRentalSerializer, RentalSerializer
 from .permissions import GenrePermissions, MoviePermissions, RentalPermissions
+from .filters import YearFilter, GenreFilter, DirectorFilter, UserFilter, MovieFilter, StatusFilter
 
 
 class GenreViewSet(ModelViewSet):
@@ -45,13 +46,14 @@ class GenreViewSet(ModelViewSet):
 
 
 class MovieViewSet(ModelViewSet):
+    queryset = Movie.objects.all()
     serializer_class = MovieSerializer
     lookup_field = 'uuid'
     permission_classes = (IsAuthenticated, MoviePermissions,)
     http_method_names = ('get', 'post', 'patch', 'delete')
 
     # filtering and ordering
-    filter_backends = [SearchFilter, OrderingFilter]
+    filter_backends = [SearchFilter, OrderingFilter, YearFilter, GenreFilter, DirectorFilter]
     search_fields = ['title']
     ordering_fields = ['title', 'year']
     ordering = ['title']
@@ -62,7 +64,7 @@ class MovieViewSet(ModelViewSet):
             user_active_rentals = self.request.user.rentals.filter(return_date=None)
             active_rentals_movies_ids = [rental.movie.id for rental in user_active_rentals]
             return queryset.filter(id__in=active_rentals_movies_ids)
-        return queryset
+        return self.filter_queryset(queryset)
 
     def list(self, request, *args, **kwargs):
         """Lists the movies."""
@@ -92,13 +94,14 @@ class MovieViewSet(ModelViewSet):
 
 
 class RentalViewSet(ModelViewSet):
+    queryset = Rental.objects.all()
     serializer_class = RentalSerializer
     lookup_field = 'uuid'
     permission_classes = (IsAuthenticated, RentalPermissions)
     http_method_names = ('get', 'post', 'patch', 'delete')
 
     # filtering and ordering
-    filter_backends = [SearchFilter, OrderingFilter]
+    filter_backends = [SearchFilter, OrderingFilter, UserFilter, MovieFilter, StatusFilter]
     search_fields = ['movie__title']
     ordering_fields = ['movie__title', 'movie__year', 'rental_date', 'return_date', 'payment']
     ordering = ['rental_date']
@@ -112,7 +115,7 @@ class RentalViewSet(ModelViewSet):
         queryset = Rental.objects.all()
         if not (self.request.user.is_staff or self.request.user.is_superuser):
             queryset = queryset.filter(user=self.request.user)
-        return queryset
+        return self.filter_queryset(queryset)
 
     def get_serializer_class(self):
         return {
@@ -148,6 +151,10 @@ class RentalViewSet(ModelViewSet):
     def partial_update(self, request, *args, **kwargs):
         """Updates the data of a rental."""
         instance = self.get_object()
+
+        if instance.returned:
+            return Response({'detail': 'This movie is already returned.'}, status=status.HTTP_400_BAD_REQUEST)
+
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         updated_instance = self.perform_update(serializer)

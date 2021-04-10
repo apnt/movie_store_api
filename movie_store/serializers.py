@@ -7,6 +7,13 @@ from .models import Genre, Movie, Rental
 from .logic import calculate_charge
 
 
+class BasicUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = get_user_model()
+        fields = ('uuid', 'email', 'first_name', 'last_name', )
+
+
 class GenreSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -16,7 +23,7 @@ class GenreSerializer(serializers.ModelSerializer):
 
 class MovieSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='movies-detail', format='html', lookup_field="uuid")
-    genres = serializers.SlugRelatedField(many=True, slug_field='name', queryset=Genre.objects.all(), default=[])
+    genres = serializers.SlugRelatedField(many=True, slug_field='name', queryset=Genre.objects.all())
 
     class Meta:
         model = Movie
@@ -29,7 +36,7 @@ class CreateRentalSerializer(serializers.ModelSerializer):
     movie = serializers.SlugRelatedField(slug_field='uuid', queryset=Movie.objects.all())
 
     def validate(self, attrs):
-        active_rental_data = {'user': attrs['user'], 'movie': attrs['movie'], 'return_date': None}
+        active_rental_data = {'user': attrs['user'], 'movie': attrs['movie'], 'returned': False}
         active_rental_exists = Rental.objects.filter(**active_rental_data).exists()
         if active_rental_exists:
             raise ValidationError('This movie is already rented.', code='non_field_errors')
@@ -37,7 +44,7 @@ class CreateRentalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Rental
-        exclude = ('id', 'return_date', 'payment')
+        fields = ('uuid', 'user', 'movie')
 
 
 @extend_schema_serializer(exclude_fields=['user'])
@@ -58,7 +65,7 @@ class UpdateRentalSerializer(serializers.ModelSerializer):
 
 @extend_schema_serializer(exclude_fields=['user'])
 class RentalSerializer(serializers.ModelSerializer):
-    user = serializers.SlugRelatedField(slug_field='email', queryset=get_user_model().objects.all())
+    user = BasicUserSerializer()
     movie = MovieSerializer()
 
     def to_representation(self, instance):
