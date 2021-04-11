@@ -65,6 +65,7 @@ REST_FRAMEWORK = {
         'iam.authentications.JWTCookieAuthentication',
     ),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'EXCEPTION_HANDLER': 'common.views.custom_exception_handler',
 }
 
 ROOT_URLCONF = 'movie_store_api.urls'
