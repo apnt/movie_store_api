@@ -1,0 +1,47 @@
+[
+{
+    "model": "iam.customuser",
+    "fields": {
+        "password": "pbkdf2_sha256$260000$V458gwqC8yGFstitb4XczO$aD9nBPbijxUh1auPcxvbvnid3iM1Klpy8R3DfFVrFg4=",
+        "uuid": "708a7043-5180-42b8-bf93-a1c605c9326f",
+        "email": "admin@moviestore.com",
+        "first_name": "admin",
+        "last_name": "superuser",
+        "is_superuser": true,
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2021-04-10T19:43:23.228Z",
+        "last_login": null
+    }
+},
+{
+    "model": "iam.customuser",
+    "fields": {
+        "password": "pbkdf2_sha256$260000$t49iasfIno4PzYNfaI6wiz$s+kggi6whgu5wuLzd4OfZnHw/jbMI33Keq8Tg1hwIQw=",
+        "uuid": "5b644978-c908-4f8b-86b2-bf9cfb9f2477",
+        "email": "user1@test.com",
+        "first_name": "user",
+        "last_name": "1",
+        "is_superuser": false,
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2021-04-10T19:43:56.389Z",
+        "last_login": null
+    }
+},
+{
+    "model": "iam.customuser",
+    "fields": {
+        "password": "pbkdf2_sha256$260000$eIIcHrzF09SLlIAHD4AEf7$ApWZ+/SsY+bUoPewtV5Ua/LdHFvguH2lMjOOHy4zmmo=",
+        "uuid": "e82578f0-7a62-46cd-89d2-dcefe097c4e5",
+        "email": "user2@test.com",
+        "first_name": "user",
+        "last_name": "2",
+        "is_superuser": false,
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2021-04-10T19:44:44.995Z",
+        "last_login": null
+    }
+}
+]
