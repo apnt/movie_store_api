@@ -48,7 +48,6 @@ class CreateRentalSerializer(serializers.ModelSerializer):
         fields = ('uuid', 'user', 'movie')
 
 
-@extend_schema_serializer(exclude_fields=['user'])
 class UpdateRentalSerializer(serializers.ModelSerializer):
 
     def save(self, **kwargs):
@@ -64,7 +63,6 @@ class UpdateRentalSerializer(serializers.ModelSerializer):
         fields = ('returned',)
 
 
-@extend_schema_serializer(exclude_fields=['user'])
 class RentalSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='rentals-detail', format='html', lookup_field="uuid")
     user = BasicUserSerializer()
