@@ -159,7 +159,7 @@ class RentalViewSet(ModelViewSet):
         serializer.is_valid(raise_exception=True)
         updated_instance = self.perform_update(serializer)
         response_serializer = self.get_response_serializer(instance=updated_instance)
-        return Response(response_serializer.data, status=status.HTTP_201_CREATED)
+        return Response(response_serializer.data, status=status.HTTP_200_OK)
 
     def destroy(self, request, *args, **kwargs):
         """Deletes a rental."""

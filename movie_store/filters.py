@@ -57,6 +57,8 @@ class UserFilter(BaseFilterBackend):
     """
     def filter_queryset(self, request, queryset, view):
         user_uuid = request.query_params.get('user')
+        if not (request.user.is_staff or request.user.is_superuser):
+            return queryset
         if user_uuid is not None:
             try:
                 return queryset.filter(user__uuid=user_uuid)

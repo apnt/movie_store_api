@@ -8,6 +8,6 @@ router = routers.DefaultRouter()
 router.register(r'users', UserViewSet, basename="users")
 
 urlpatterns = [
-    path('auth/', AuthView.as_view(), name='authenticate'),
     re_path(r'', include(router.urls)),
+    path('auth/', AuthView.as_view(), name='authenticate'),
 ]

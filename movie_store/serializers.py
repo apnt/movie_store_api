@@ -14,11 +14,12 @@ class BasicUserSerializer(serializers.ModelSerializer):
         fields = ('uuid', 'email', 'first_name', 'last_name', )
 
 
-class GenreSerializer(serializers.ModelSerializer):
+class GenreSerializer(serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name='genres-detail', format='html', lookup_field="uuid")
 
     class Meta:
         model = Genre
-        exclude = ('id',)
+        fields = '__all__'
 
 
 class MovieSerializer(serializers.HyperlinkedModelSerializer):
@@ -64,7 +65,8 @@ class UpdateRentalSerializer(serializers.ModelSerializer):
 
 
 @extend_schema_serializer(exclude_fields=['user'])
-class RentalSerializer(serializers.ModelSerializer):
+class RentalSerializer(serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name='rentals-detail', format='html', lookup_field="uuid")
     user = BasicUserSerializer()
     movie = MovieSerializer()
 
@@ -77,4 +79,4 @@ class RentalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Rental
-        exclude = ('id', )
+        fields = '__all__'

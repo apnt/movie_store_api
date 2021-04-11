@@ -3,3 +3,5 @@ Django==3.2
 djangorestframework==3.12.4
 djangorestframework-simplejwt==4.6.0
 drf-spectacular==0.15.1
+pytest==6.2.3
+pytest-django==4.2.0
