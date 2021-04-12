@@ -126,6 +126,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Simple JWT settings
+# The keys are exposed because this is a development environment
+# for a technical skills demo. They should not be exposed in a
+# production environment (for example they could be set as
+# environment variables during deployment)
 SIMPLEJWT_PRIVATE_KEY = '''-----BEGIN RSA PRIVATE KEY-----
 MIIEowIBAAKCAQEAvZ75nNLe2bOCm7GU04YuZzBsl2AAf5MElkriZXUjo1oCdp2b
 Vt3HU/E6c2Z0W8p3mIW7EC+M9qoGsmDzfRwUD3CD5+pIJuYDgz9dnziDtKqOaDxB
