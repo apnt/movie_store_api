@@ -96,7 +96,7 @@ DATABASES = {
         'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        'HOST': 'localhost',
+        'HOST': 'postgres_db',
         'PORT': '5432',
         'OPTIONS': {
             'options': '-c search_path=movie_store'

@@ -1,4 +1,3 @@
-import psycopg2
 import pytest
 from django.db import connection
 from django.conf import settings
@@ -51,3 +50,10 @@ def django_db_setup(django_db_blocker, django_db_createdb, django_db_keepdb):
                     c = connection.cursor()
                 c.execute('''DROP SCHEMA {test_schema} CASCADE;'''.format(test_schema=schema))
                 c.close()
+
+
+# in case of using the default postgres schema, this is enough to load the initial_data.json
+# @pytest.fixture(scope='session')
+# def django_db_setup(django_db_setup, django_db_blocker):
+#     with django_db_blocker.unblock():
+#         call_command('loaddata', 'common/tests/initial_data.json')
