@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+from os import getenv
 from pathlib import Path
 from datetime import timedelta
 
@@ -130,43 +131,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # for a technical skills demo. They should not be exposed in a
 # production environment (for example they could be set as
 # environment variables during deployment)
-SIMPLEJWT_PRIVATE_KEY = '''-----BEGIN RSA PRIVATE KEY-----
-MIIEowIBAAKCAQEAvZ75nNLe2bOCm7GU04YuZzBsl2AAf5MElkriZXUjo1oCdp2b
-Vt3HU/E6c2Z0W8p3mIW7EC+M9qoGsmDzfRwUD3CD5+pIJuYDgz9dnziDtKqOaDxB
-mYt+fF1em7it5Uit0vKEvNdH40quSPiYDe9Y52SG5IgEAKRFoP00BMS6ELqy2Aim
-/+ws1LBsfZmqeWjmugNk+w6fdaRcwVXgLNweh6fTSxbjDZnZqiMQHfjli93vHQWS
-diOG/h7xakRDfT78GTHUEEYjXuF0HDGn/bvmZ3EzT6PRHIL1UdOT8mr1rx+NQZTY
-yD1bRM8KYWDpPjFY8GYUK+4GDli2r0DKmO71HwIDAQABAoIBAQCe7O8okVRWAi4l
-b+DcqEmcEunwtXW1dvMRRBIcFuGXt4j5AX+AfsDhif0DW4uKo1c5blwqZLAwzLBw
-MPHimfX2OsdTSPjQIVgwWJuPJz673XcdxeL1XgTVFyyEN3UIBrIpazn1TDnkNmN8
-pV5Lz58j0Q193MH+B7CUDaPbm0aXXW/o7AdYS5rj7cIpf3ykM1kbG9Mkv1RrRim8
-UJYEfOSCRHtGa5omOxJhUWxOfY6vPbltQ2j7bs447MlJ8iW4nBnxXLuYbpdppcQm
-UenA3YdRuUkr09dJnxpixWUKE6knz3vV3duxYdnXXu+QIRp4TrFhJ0tKPtw9orJo
-3YJRCAuBAoGBAPP6KjhbAUime8Sooxdj6i/O7DK1UzDKZ/IgZRuNxCC4flwC2+Qz
-KLbJID2wdbNEDbxNeoegJIGDL6hGRgCrZgC02zGKslOnsuEKIv/attTL1zSj1r4P
-P8e05bkdoE2VCViSwGOog/yjfYKTsXQEQ44xj2A4tHS95MHpOs0EXSOtAoGBAMb3
-F7Nz1iVbbfjIDgkclEclAkAQs3ww90Q2oTDMpIO90dt0MeUxSsRXL/K3luVp1Ybz
-DakUYBEm17YOdrGUxBck2RKTssJBJnTjRfzV9GbFSJZ49UDZji1hbEoqziV5y3gk
-53c3JpAaFN9aeJlsceKu6i6vitGvT7b5s3awfDV7AoGADeaU/T0CJ7eEmcHZ+P0y
-XKL3hjQal08Q+RSrbhR3tj2MxYVMLgZULYXsFle1fQ9FkRMBBjUzn0VwM7A9UNBz
-MVscmggC/Q0y/etr7xPxEtLCYjdrhsyrn59I73EmrwTs0WUbHRJ+4qgWAJiVpbyQ
-dMuSFbNlZLllDT9SoFe9TskCgYA4pnoVGlJK6LFzOGLmrUB60UrGuvqfzcFZpsRW
-hK4C5LUv6vGZ9GL5bGm2jhdk0rF9bw7gqXCA8bJRn+Sjw1vhyxgTdgJb1PkCJwPy
-bWjdKib00RPjlw4oVajjpTR07yzD1J4jD4znUsXGopfb90il5m+/QzQfZ+8mhgpX
-LQDwqQKBgAkoQSXaoySCrIPOo+n7apuAE56Vh9NUSW7xNf1fDktZ46Y6K/5N6JgR
-tUyzmV4U6+2zzQelkXMUQh/ZnYx09iJ39nbnJKPKx/N+RA+bW4nqlcmZerb6Vaai
-HL6E7agiImieaJjIUHKARiY+xGLwOKjdQ47+QWRAS+MjicCWisns
------END RSA PRIVATE KEY-----'''
-
-SIMPLEJWT_PUBLIC_KEY = '''-----BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvZ75nNLe2bOCm7GU04Yu
-ZzBsl2AAf5MElkriZXUjo1oCdp2bVt3HU/E6c2Z0W8p3mIW7EC+M9qoGsmDzfRwU
-D3CD5+pIJuYDgz9dnziDtKqOaDxBmYt+fF1em7it5Uit0vKEvNdH40quSPiYDe9Y
-52SG5IgEAKRFoP00BMS6ELqy2Aim/+ws1LBsfZmqeWjmugNk+w6fdaRcwVXgLNwe
-h6fTSxbjDZnZqiMQHfjli93vHQWSdiOG/h7xakRDfT78GTHUEEYjXuF0HDGn/bvm
-Z3EzT6PRHIL1UdOT8mr1rx+NQZTYyD1bRM8KYWDpPjFY8GYUK+4GDli2r0DKmO71
-HwIDAQAB
------END PUBLIC KEY-----'''
+SIMPLEJWT_PRIVATE_KEY = getenv('private_key')
+SIMPLEJWT_PUBLIC_KEY = getenv('public_key')
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
